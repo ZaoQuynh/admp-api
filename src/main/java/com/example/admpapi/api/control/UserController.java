@@ -3,6 +3,8 @@ package com.example.admpapi.api.control;
 import com.example.admpapi.api.model.User;
 import com.example.admpapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,10 +21,11 @@ public class UserController {
     }
 
     @GetMapping("/get-user")
-    public User getUser(@RequestParam String username, String password){
+    public ResponseEntity<User> getUser(@RequestParam String username, @RequestParam String password) {
         Optional<User> user = userService.getUser(username, password);
-        return user.orElse(null);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
+
 
     @PostMapping("/add-user")
     public User create(@RequestBody Map<String, String> body){

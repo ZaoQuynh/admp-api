@@ -21,7 +21,7 @@ public class UserService {
 
     public Optional<User> getUser(String username, String password) {
         User user = userRepository.findByUsernameAndPassword(username, password);
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     public User save(User user) {
