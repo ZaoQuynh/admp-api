@@ -1,15 +1,24 @@
-FROM ubuntu:latest AS build
+# Stage 1: Build the application
+FROM --platform=linux/amd64 maven:3.8.3-openjdk-17 AS build
+WORKDIR /chat-hub-mobile-api
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . .
+# Copy only the project definition files
+COPY pom.xml .
 
-RUN ./gradlew bootJar --no-daemon
+# Download dependencies and cache them
+RUN mvn dependency:go-offline -B
 
-FROM openjdk:17-jdk-slim
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-EXPOSE 8080
+# Stage 2: Set up the runtime environment
+FROM --platform=linux/amd64 openjdk:17-jdk-slim AS runtime
+WORKDIR /chat-hub-mobile-api
 
-COPY --from=build /build/libs/demo-1.jar app.jar
+# Copy the built JAR file from the previous stage
+COPY --from=build /chat-hub-mobile-api/target/chat-hub-mobile-api.jar .
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Expose the port on which the application will run
+EXPOSE 8000
+
+ENTRYPOINT ["java", "-jar", "chat-hub-mobile-api.jar"]
