@@ -19,12 +19,21 @@ public class UserService {
     public UserService (){
     }
 
+    public Optional<User> findById(Long uid) {
+        return userRepository.findById(uid);
+    }
+
     public Optional<User> getUser(String username, String password) {
         User user = userRepository.findByUsernameAndPassword(username, password);
         return Optional.ofNullable(user);
     }
 
     public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    public User updatePassword(User user, String password) {
+        user.setPassword(password);
         return userRepository.save(user);
     }
 }

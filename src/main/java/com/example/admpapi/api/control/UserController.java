@@ -40,4 +40,16 @@ public class UserController {
 
         return userService.save(user);
     }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<User> updatePassword(@RequestParam Long uid, @RequestParam String password) {
+        Optional<User> userOptional = userService.findById(uid);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            userService.updatePassword(user, password);
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }
