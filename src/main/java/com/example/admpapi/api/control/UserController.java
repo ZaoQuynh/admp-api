@@ -53,14 +53,12 @@ public class UserController {
     }
 
     @PutMapping("/update-password")
-    public ResponseEntity<User> updatePassword(@RequestParam Long uid, @RequestParam String password) {
-        Optional<User> userOptional = userService.findById(uid);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            userService.updatePassword(user, password);
-            return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    public ResponseEntity<String> updatePassword(@RequestParam Long uid, @RequestParam String password) {
+        try {
+            userService.updatePassword(uid, password);
+            return ResponseEntity.ok("Password updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body("Failed to update password: " + e.getMessage());
         }
     }
 }

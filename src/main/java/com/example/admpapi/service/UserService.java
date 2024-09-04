@@ -32,9 +32,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updatePassword(User user, String password) {
+    public void updatePassword(Long uid, String password) {
+        User user = userRepository.findById(uid)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + uid));
+
         user.setPassword(password);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public Optional<User> findByEmail(String email) {
