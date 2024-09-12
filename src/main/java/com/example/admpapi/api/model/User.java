@@ -15,6 +15,7 @@ public class User {
     private String username;
     private String password;
     private String role;
+    private boolean isEnable = false;
 
     public User(){
 
@@ -82,5 +83,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(boolean enable) {
+        isEnable = enable;
     }
 }

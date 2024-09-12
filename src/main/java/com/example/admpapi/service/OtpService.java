@@ -9,18 +9,18 @@ public class OtpService {
 
     private final ConcurrentHashMap<String, String> otpStorage = new ConcurrentHashMap<>();
 
-    public String generateOtp(String email) {
+    public String generateOtp(String key) {
 
         String otp = String.format("%06d", new Random().nextInt(999999));
-        otpStorage.put(email, otp);
+        otpStorage.put(key, otp);
         return otp;
     }
 
-    public boolean verifyOtp(String email, String otp) {
-        return otp.equals(otpStorage.get(email));
+    public boolean verifyOtp(String key, String otp) {
+        return otp.equals(otpStorage.get(key));
     }
 
-    public void clearOtp(String email) {
-        otpStorage.remove(email);
+    public void clearOtp(String key) {
+        otpStorage.remove(key);
     }
 }

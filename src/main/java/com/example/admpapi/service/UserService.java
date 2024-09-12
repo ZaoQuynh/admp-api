@@ -4,6 +4,7 @@ package com.example.admpapi.service;
 import com.example.admpapi.api.model.User;
 import com.example.admpapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -13,8 +14,12 @@ import java.util.*;
 public class UserService {
 
     private List<User> users;
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserService (){
     }
@@ -36,7 +41,7 @@ public class UserService {
         User user = userRepository.findById(uid)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + uid));
 
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
 

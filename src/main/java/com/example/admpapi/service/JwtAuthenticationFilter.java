@@ -1,6 +1,5 @@
 package com.example.admpapi.service;
 
-import com.mysql.cj.log.Log;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String path = request.getRequestURI();
-        if (!path.startsWith("/api/v1/auth/register") && !path.startsWith("/api/v1/auth/login")) {
+        if (!path.startsWith("/api/v1/auth") && !path.startsWith("/api/v1/otp")) {
             String bearerToken = request.getHeader("Authorization");
             if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
                 try {
@@ -53,8 +52,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Bearer token missing or invalid");
                 return;
             }
-        } else {
-            System.out.println("Login/Register");
         }
         filterChain.doFilter(request, response);
     }

@@ -72,7 +72,6 @@ public class AuthController {
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 if (!passwordEncoder.matches(password, user.getPassword())) {
-                    // Trả về lỗi nếu mật khẩu không khớp
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
                 }
                 String jwtToken = jwtService.createJwtToken(user);
